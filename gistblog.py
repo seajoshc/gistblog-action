@@ -8,16 +8,16 @@ from pathlib import Path
 from github import Github, Gist, InputFileContent
 
 
-token = os.environ.get('GISTS_TOKEN')
-
 parser = argparse.ArgumentParser()
+parser.add_argument("token", help="GitHub Personal Access Token with only 'Gists' scope. More info at https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token.")
 parser.add_argument("operation", help="create or update")
 parser.add_argument(
     "blog", help="Space delimited list of all files to upload to Gists.")
 args = parser.parse_args()
+
 print("Blog posts to process\n {}\n  {}".format(args.operation, args.blog))
 
-g = Github(token)
+g = Github(args.token)
 github_user = g.get_user()
 
 for post in args.blog.split(","):

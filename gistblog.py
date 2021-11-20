@@ -2,10 +2,8 @@
 # Turn a blog into a bunch of gists
 
 import argparse
-import os
-import sys
 from pathlib import Path
-from github import Github, Gist, InputFileContent
+from github import Github, InputFileContent
 
 
 parser = argparse.ArgumentParser()

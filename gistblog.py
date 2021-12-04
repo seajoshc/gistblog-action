@@ -18,7 +18,7 @@ args = parser.parse_args()
 print("Blog posts to process\n {}\n  {}".format(args.operation, args.blog))
 
 # Validate arguments
-if args.operation != "create" or "update":
+if args.operation not in "create, update":
     print("Invalid Operation: only 'create' or 'update' are allowed.")
     exit(1)
 

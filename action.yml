@@ -1,0 +1,26 @@
+# action.yml
+name: 'gistblog'
+description: 'Blog your little heart out using GitHub Gists and Markdown.'
+inputs:
+  # For information on how to create a Personal Access Token in GitHub see:
+  # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+  gists-token:  
+    description: 'A valid GitHub Personal Access Token with "gist" scope.'
+    required: true
+    default: ''
+  operation:  
+    description: 'The operation to perform either "create" or "update".'
+    required: true
+    default: ''
+  blog-files:  
+    description: 'A space delimited list of files to process.'
+    required: true
+    default: ''
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.gists-token }}
+    - ${{ inputs.operation }}
+    - ${{ inputs.blog-files }}

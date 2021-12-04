@@ -45,7 +45,7 @@ for post in args.blog.split(" "):
 
         # Create a new gist
         new_gist = github_user.create_gist(True, d, post_description)
-        print("Created new blog post with gist ID: {}".format((new_gist.id)))
+        print(" Created new blog post with Gist ID: {}".format((new_gist.id)))
 
         # Print out new row for blog table of contents
         print("| Title | Published  | Id |")
@@ -71,4 +71,4 @@ for post in args.blog.split(" "):
         gist_to_update.edit(description=post_description, files={
             post_file_name: InputFileContent(Path(post).read_text(encoding="utf-8"))})
 
-        print(" Updated Gist with ID {}".format(gist_id))
+        print(" Updated blog post with Gist ID {}".format(gist_id))

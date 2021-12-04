@@ -4,8 +4,8 @@ COPY ./requirements.txt requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-COPY ./gistblog.py gistblog.py
+COPY ./gistblog.py /app/gistblog.py
 
-RUN chmod +x ./gistblog.py
+RUN chmod +x /app/gistblog.py
 
-ENTRYPOINT [ "./gistblog.py" ]
+ENTRYPOINT [ "/app/gistblog.py" ]

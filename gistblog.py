@@ -45,10 +45,11 @@ for post in args.blog.split(" "):
 
         # Create a new gist
         new_gist = github_user.create_gist(True, d, post_description)
+        print("Created new blog post with gist ID: {}".format((new_gist.id)))
 
         # Print out new row for blog table of contents
-        print("\n| Title | Published  | Id |")
-        print("\n| [{}]({}) | {} | {} |".format(
+        print("| Title | Published  | Id |")
+        print("| [{}]({}) | {} | {} |".format(
             post_title.replace("\n", ""),
             new_gist.html_url,
             new_gist.created_at.strftime("%Y-%m-%d"),

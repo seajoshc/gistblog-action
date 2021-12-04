@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Turn a blog into a bunch of gists
+"""
+Blog your little heart out using GitHub Gists.
+"""
 
 import argparse
 import os

@@ -19,7 +19,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/seajoshc/gistblog:v1'
   args:
     - ${{ inputs.gists-token }}
     - ${{ inputs.operation }}

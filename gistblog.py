@@ -54,13 +54,30 @@ for post in args.blog.split(" "):
         new_gist = github_user.create_gist(True, d, post_description)
         print(" Created new blog post with Gist ID: {}".format((new_gist.id)))
 
-        # Print out new row for blog table of contents
-        print("| Title | Published  | Id |")
-        print("| [{}]({}) | {} | {} |".format(
+        # Table of Contents
+        new_table = "| Title | Published  | Id |"
+        new_row = "| [{}]({}) | {} | {} |".format(
             post_title.replace("\n", ""),
             new_gist.html_url,
             new_gist.created_at.strftime("%Y-%m-%d"),
-            post))
+            post)
+
+        # Find or create a Table of Contents (ToC) gist
+        all_gists = github_user.get_gists()
+        toc_gist_id = ""
+
+        # Find the id of the gist we need to update by looking
+        # at all gists and matching on filename of the ToC
+        for gist in all_gists:
+            if "gistblog-table-of-contents.md" in gist.files:
+                toc_gist_id = gist.id
+                break
+
+        # Update ToC if we found one, otherwise create it
+        if toc_gist_id:
+            pass
+        else:
+            pass
 
     # Update a blog post
     if args.operation == "update":

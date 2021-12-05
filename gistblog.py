@@ -31,7 +31,7 @@ for post in args.blog.split(" "):
     print("Processing {}".format(post))
     post_title = ""
     post_description = ""
-    post_file_name = post.split("/")[1]
+    post_file_name = "gistblog|" + post.split("/")[1]
 
     # Parse Title and Description out of blog post
     with open(post, encoding="utf-8") as file:
@@ -54,31 +54,6 @@ for post in args.blog.split(" "):
         new_gist = github_user.create_gist(True, d, post_description)
         print(" Created new blog post with Gist ID: {}".format((new_gist.id)))
 
-        # Table of Contents
-        new_table = "| Title | Published  | Id |"
-        new_row = "| [{}]({}) | {} | {} |".format(
-            post_title.replace("\n", ""),
-            new_gist.html_url,
-            new_gist.created_at.strftime("%Y-%m-%d"),
-            post)
-
-        # Find or create a Table of Contents (ToC) gist
-        all_gists = github_user.get_gists()
-        toc_gist_id = ""
-
-        # Find the id of the gist we need to update by looking
-        # at all gists and matching on filename of the ToC
-        for gist in all_gists:
-            if "gistblog-table-of-contents.md" in gist.files:
-                toc_gist_id = gist.id
-                break
-
-        # Update ToC if we found one, otherwise create it
-        if toc_gist_id:
-            pass
-        else:
-            pass
-
     # Update a blog post
     if args.operation == "update":
         all_gists = github_user.get_gists()
@@ -97,3 +72,28 @@ for post in args.blog.split(" "):
             post_file_name: InputFileContent(Path(post).read_text(encoding="utf-8"))})
 
         print(" Updated blog post with Gist ID {}".format(gist_id))
+
+# Update the table of contents
+new_table = "| Title | Published  | Id |"
+"| [{}]({}) | {} | {} |".format(
+    post_title.replace("\n", ""),
+    new_gist.html_url, # TODO this should be the long form URL with the GH username
+    new_gist.created_at.strftime("%Y-%m-%d"),
+    post)
+
+# Find or create a Table of Contents (ToC) gist
+all_gists = github_user.get_gists()
+toc_gist_id = ""
+
+# Find the id of the gist we need to update by looking
+# at all gists and matching on filename of the ToC
+for gist in all_gists:
+    if "gistblog-table-of-contents.md" in gist.files:
+        toc_gist_id = gist.id
+        break
+
+# Update ToC if we found one, otherwise create it
+if toc_gist_id:
+    pass
+else:
+    pass

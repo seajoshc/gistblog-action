@@ -26,13 +26,15 @@ if args.operation not in "create, update":
 g = Github(args.token)
 github_user = g.get_user()
 
+###
 # Start processing all the blog posts
+###
 for post in args.blog.split(" "):
     print("Processing {}".format(post))
-    post_description = "".strip()
     post_file_name = "gistblog_" + post.split("/")[1]
+    post_description = post_file_name  # default to file name
 
-    # Parse Title and Description out of blog post
+    # Parse description out of blog post if there
     with open(post, encoding="utf-8") as file:
         for line in file:
             if "post_description:" in line:
@@ -70,7 +72,6 @@ for post in args.blog.split(" "):
 ###
 # Managing the Table of Contents (ToC)
 ###
-
 all_gists = github_user.get_gists()
 toc_gist = None
 gistblogs = []
@@ -83,7 +84,6 @@ for gist in all_gists:
         toc_gist = gist
         continue
     if any(key.startswith("gistblog_") for key in gist.files):
-        print(gist.files)
         gistblogs.append(gist)
 
 # Build the Table of Contents markdown file

@@ -91,7 +91,7 @@ table = "| Post | Published |"  # Header row
 table += "\n| ---- | --------- |"
 for post in gistblogs:
     table += ("\n| [{}]({}) | {} |".format(
-        post.description,
+        post.description.replace("\n", ""),
         post.html_url,  # TODO this should be the long form URL with the GH username,
         post.created_at.strftime("%Y-%m-%d")
     ))

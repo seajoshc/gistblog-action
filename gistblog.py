@@ -29,18 +29,14 @@ github_user = g.get_user()
 # Start processing all the blog posts
 for post in args.blog.split(" "):
     print("Processing {}".format(post))
-    post_title = ""
-    post_description = ""
-    post_file_name = "gistblog|" + post.split("/")[1]
+    post_description = "".strip()
+    post_file_name = "gistblog_" + post.split("/")[1]
 
     # Parse Title and Description out of blog post
     with open(post, encoding="utf-8") as file:
         for line in file:
-            if "Title:" in line:
-                post_title = line.split("Title:")[1]
-            if "Description:" in line:
-                post_description = line.split("Description:")[1]
-            if post_title and post_description:
+            if "post_description:" in line:
+                post_description = line.split("post_description:")[1]
                 break
 
     # Create new blog posts
@@ -73,27 +69,41 @@ for post in args.blog.split(" "):
 
         print(" Updated blog post with Gist ID {}".format(gist_id))
 
-# Update the table of contents
-new_table = "| Title | Published  | Id |"
-"| [{}]({}) | {} | {} |".format(
-    post_title.replace("\n", ""),
-    new_gist.html_url, # TODO this should be the long form URL with the GH username
-    new_gist.created_at.strftime("%Y-%m-%d"),
-    post)
+###
+# Managing the Table of Contents (ToC)
+###
 
-# Find or create a Table of Contents (ToC) gist
 all_gists = github_user.get_gists()
-toc_gist_id = ""
+toc_gist = None
+gistblogs = []
 
-# Find the id of the gist we need to update by looking
-# at all gists and matching on filename of the ToC
+# Look through all the user's gists so we can:
+# 1. Find the ToC gist, if it exists
+# 2. Find any gist that is a gistblog post
 for gist in all_gists:
     if "gistblog-table-of-contents.md" in gist.files:
-        toc_gist_id = gist.id
-        break
+        toc_gist = gist
+        continue
+    if any(key.startswith("gistblog_") for key in gist.files):
+        print(gist.files)
+        gistblogs.append(gist)
+
+# Build the Table of Contents markdown file
+table = "| Post | Published |"  # Header row
+table += "\n| ---- | --------- |"
+for post in gistblogs:
+    table += ("\n| [{}]({}) | {} |".format(
+        post.description,
+        post.html_url,  # TODO this should be the long form URL with the GH username,
+        post.created_at.strftime("%Y-%m-%d")
+    ))
+
+toc = {}
+toc['gistblog-table-of-contents.md'] = InputFileContent(table)
 
 # Update ToC if we found one, otherwise create it
-if toc_gist_id:
-    pass
+if toc_gist:
+    toc_gist.edit(description="Blog Table of Contents", files=toc)
 else:
-    pass
+    github_user.create_gist(public=True, files=toc,
+                            description="Blog Table of Contents")

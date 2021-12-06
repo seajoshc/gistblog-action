@@ -53,17 +53,15 @@ for post in args.blog.split(" "):
     # Update a blog post
     if args.operation == "update":
         all_gists = github_user.get_gists()
-        gist_id = ""
+        gist_to_update = None
 
         # Find the id of the gist we need to update by looking
         # at all gists and matching on filename of the blog post
         for gist in all_gists:
             if post_file_name in gist.files:
-                gist_id = gist.id
+                gist_to_update = gist
                 break
 
-        # Update the gist with the new content
-        gist_to_update = g.get_gist(gist_id)
         gist_to_update.edit(description=post_description, files={
             post_file_name: InputFileContent(Path(post).read_text(encoding="utf-8"))})
 

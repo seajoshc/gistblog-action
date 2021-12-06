@@ -65,7 +65,7 @@ for post in args.blog.split(" "):
         gist_to_update.edit(description=post_description, files={
             post_file_name: InputFileContent(Path(post).read_text(encoding="utf-8"))})
 
-        print(" Updated blog post with Gist ID {}".format(gist_id))
+        print(" Updated blog post with Gist ID {}".format(gist_to_update.id))
 
 ###
 # Managing the Table of Contents (ToC)

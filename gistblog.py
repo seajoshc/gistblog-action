@@ -14,6 +14,10 @@ parser.add_argument("token", help="GitHub Personal Access Token with only 'Gists
 parser.add_argument("operation", help="create or update")
 parser.add_argument(
     "blog", help="Space delimited list of all files to upload to Gists.")
+parser.add_argument(
+    "name", help="Name of your blog, it gets displayed in the generated table of contents.")
+parser.add_argument(
+    "gistio", help="True or False, whether or not to use https://gist.io for URLs generated.")
 args = parser.parse_args()
 print("Blog posts to process\n {}\n  {}".format(args.operation, args.blog))
 
@@ -21,6 +25,16 @@ print("Blog posts to process\n {}\n  {}".format(args.operation, args.blog))
 if args.operation not in "create, update":
     print("Invalid Operation: only 'create' or 'update' are allowed.")
     exit(1)
+
+if args.name:
+    BLOG_NAME = str("{}\n".format(args.blog_name))
+else:
+    BLOG_NAME = ""
+
+if args.gistio:
+    POST_URL_PREFIX = "https://gist.io/@"
+else:
+    POST_URL_PREFIX = "https://gist.github.com/"
 
 # Setup PyGithub
 g = Github(args.token)
@@ -87,12 +101,14 @@ for gist in all_gists:
         gistblogs.append(gist)
 
 # Build the Table of Contents markdown file
-table = "| Post | Published |"  # Header row
+table = "{}| Post | Published |".format(BLOG_NAME)  # Header row
 table += "\n| ---- | --------- |"
 for post in gistblogs:
-    table += ("\n| [{}]({}) | {} |".format(
+    table += ("\n| [{}]({}{}/{}) | {} |".format(
         post.description.replace("\n", ""),
-        post.html_url,  # TODO this should be the long form URL with the GH username,
+        POST_URL_PREFIX,
+        github_user.login,
+        post.id,
         post.created_at.strftime("%Y-%m-%d")
     ))
 

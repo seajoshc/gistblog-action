@@ -27,11 +27,11 @@ if args.operation not in "create, update":
     exit(1)
 
 if args.name:
-    BLOG_NAME = str("{}\n".format(args.blog_name))
+    BLOG_NAME = str("{}\n".format(args.name))
 else:
     BLOG_NAME = ""
 
-if args.gistio:
+if "true" in str(args.gistio).lower():
     POST_URL_PREFIX = "https://gist.io/@"
 else:
     POST_URL_PREFIX = "https://gist.github.com/"

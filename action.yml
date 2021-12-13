@@ -5,17 +5,20 @@ inputs:
   # For information on how to create a Personal Access Token in GitHub see:
   # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
   gists-token:  
-    description: 'A valid GitHub Personal Access Token with "gist" scope.'
+    description: "GitHub Personal Access Token with only 'Gists' scope. More info at https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token."
     required: true
-    default: ''
   operation:  
     description: 'The operation to perform either "create" or "update".'
     required: true
-    default: ''
   blog-files:  
-    description: 'A space delimited list of files to process.'
+    description: "Space delimited list of all files to upload to Gists."
     required: true
-    default: ''
+  blog-name:  
+    description: "Name of your blog, it gets displayed in the generated table of contents. Protip: This string will be injected into a Markdown file so you can include a URL if you'd like. e.g. \"[Josh's Blog](https://twitter.com/seajoshc)\"."
+    required: true
+  use-gistio:  
+    description: "True or False, whether or not to use https://gist.io for URLs generated."
+    required: true
 
 runs:
   using: 'docker'
@@ -24,3 +27,5 @@ runs:
     - ${{ inputs.gists-token }}
     - ${{ inputs.operation }}
     - ${{ inputs.blog-files }}
+    - ${{ inputs.blog-name }}
+    - ${{ inputs.use-gistio }}

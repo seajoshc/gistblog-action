@@ -15,7 +15,7 @@ parser.add_argument("operation", help="create or update")
 parser.add_argument(
     "blog", help="Space delimited list of all files to upload to Gists.")
 parser.add_argument(
-    "name", help="Name of your blog, it gets displayed in the generated table of contents.")
+    "name", help="Name of your blog, it gets displayed in the generated table of contents. Protip: This string will be injected into a Markdown file so you can include a URL if you'd like. e.g. \"[Josh's Blog](https://twitter.com/seajoshc)\".")
 parser.add_argument(
     "gistio", help="True or False, whether or not to use https://gist.io for URLs generated.")
 args = parser.parse_args()
@@ -119,5 +119,7 @@ toc['gistblog-table-of-contents.md'] = InputFileContent(table)
 if toc_gist:
     toc_gist.edit(description="Blog Table of Contents", files=toc)
 else:
-    github_user.create_gist(public=True, files=toc,
-                            description="Blog Table of Contents")
+    toc_gist = github_user.create_gist(public=True, files=toc,
+                                       description="Blog Table of Contents")
+
+print("Table of Contents: {}".format(toc_gist.html_url))
